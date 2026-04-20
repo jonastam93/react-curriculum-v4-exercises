@@ -12,11 +12,13 @@
   Use the commented "Explanation" section at the bottom of this lesson's components.
 */
 
+import { useState } from 'react';
+
 export default function BugProps({ name = 'friend' }) {
-  let message = 'Hello, ' + name;
+  const [message, setMessage] = useState('Hello, ' + name);
 
   function handleChange() {
-    message = 'Hi, ' + name + '!';
+    setMessage('Hi, ' + name + '!');
   }
 
   return (
@@ -29,3 +31,8 @@ export default function BugProps({ name = 'friend' }) {
 
 // Explanation:
 // (Write your explanation here)
+// The issue was caused by storing the message in a variable. React does not
+// track changes to normal variables, so updating message did not trigger
+// a re-render. By using the useState hook, the message is now stored in state.
+// When setMessage is called, React detects the change and re-renders the
+// component, allowing the updated message to appear in the UI.
