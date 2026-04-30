@@ -7,9 +7,14 @@ export default function BugStrictMode() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    setInterval(() => {
+    const intervalId = setInterval(() => {
       setCount((c) => c + 1);
     }, 1000);
+
+    // cleanup function
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   return (
@@ -21,3 +26,11 @@ export default function BugStrictMode() {
 }
 
 // Write your explanation of how StrictMode helps us catch this bug
+
+// React.StrictMode mounts components twice in development to detect side
+// effects that aren't cleaned up. In this case, the useEffect creates a
+// setInterval but doesn't clear it when the component unmounts. As a
+// result, multiple intervals run simultaneously, causing the counter
+// to increment incorrectly. By adding a cleanup function that calls clearInterval,
+// we ensure only one interval runs at a time. StrictMode exposes this issue
+// early so it doesn't cause bugs in production.
